@@ -37,22 +37,25 @@ class LoginController: UIViewController {
         button.layer.cornerRadius = 5
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.setHeight(50)
+       return button
+    }()
+    
+    private let forgotPasswordButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.attributedTitle(firstPart: "Forgot your password?", secondPart: "Get help signing in.")
         return button
     }()
     
     private let dontHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
-        button.attributedTitle(firstPart: "Forgot your password?", secondPart: "Get help signing in")
-        return button
-    }()
-    
-    private let forgotPasswordButton: UIButton = {
-        let button = UIButton(type: .system)
         button.attributedTitle(firstPart: "Don't have an Account?", secondPart: "Sign up")
+        button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
         return button
     }()
     
-    // Mark: - Lifecycle
+
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,18 +63,20 @@ class LoginController: UIViewController {
         
     }
     
+    // MARK: - Actions
+    
+    @objc func handleShowSignUp(){
+        let controller = RegistrationController()
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
     // MARK: - Helpers
     
     func configureUI(){
+        configureGradientLayer()
         view.backgroundColor = .white
         navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.barStyle = .black
-        
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor.systemPurple.cgColor, UIColor.systemBlue.cgColor]
-        gradient.locations = [0, 1]
-        view.layer.addSublayer(gradient)
-        gradient.frame = view.frame
         
         view.addSubview(iconImage)
         iconImage.centerX(inView: view)
