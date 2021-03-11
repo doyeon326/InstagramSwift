@@ -24,7 +24,11 @@ class MainTabController: UITabBarController {
         
         view.backgroundColor = .white
         
-        let feed = templateNavigationController(unselectedImage: #imageLiteral(resourceName: "home_unselected"), selectedImage: #imageLiteral(resourceName: "home_selected"), rootViewController: FeedController())
+        // ERROR MESSAGE: UICollectionView must be initialized with a non-nil layout parameter
+        // Feed == CollectionViewController, that's why we need to pass the viewFlowLayout as well as below
+        let layout = UICollectionViewFlowLayout()
+        
+        let feed = templateNavigationController(unselectedImage: #imageLiteral(resourceName: "home_unselected"), selectedImage: #imageLiteral(resourceName: "home_selected"), rootViewController: FeedController(collectionViewLayout: layout))
         
         let search = templateNavigationController(unselectedImage: #imageLiteral(resourceName: "search_unselected"), selectedImage: #imageLiteral(resourceName: "search_selected"), rootViewController: SearchController())
         
