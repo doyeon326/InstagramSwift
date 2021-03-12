@@ -11,6 +11,7 @@ class RegistrationController: UIViewController {
     
     // MARK: - Properties
     
+    private var viewModel = RegistrationViewModel()
     private let plushPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo"), for: .normal)
@@ -50,12 +51,28 @@ class RegistrationController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureNotificationObservers()
     }
     // MARK: - Actions
     
     @objc func handleShowLogin() {
         navigationController?.popViewController(animated: true)
     }
+    
+    
+    @objc func textDidChange(sender: UITextField) {
+        if sender == emailTextField {
+            viewModel.email = sender.text
+        } else if sender == passwordTextField{
+            viewModel.password = sender.text
+        } else if sender == fullnameTextField {
+            viewModel.fullname = fullnameTextField.text
+        } else if sender == userNameTextField {
+            viewModel.username = userNameTextField.text
+        }
+        updateForm()
+    }
+    
     // MARK: - Helpers
     
     func configureUI(){
@@ -77,4 +94,22 @@ class RegistrationController: UIViewController {
         alreadyHaveAccount.centerX(inView: view)
         alreadyHaveAccount.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor)
     }
+    
+    func configureNotificationObservers() {
+        emailTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        fullnameTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        userNameTextField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+    }
+}
+
+//MARK: - FormViewModel
+
+extension RegistrationController: FormViewModel {
+    func updateForm() {
+        signUpButton.backgroundColor = viewModel.buttonBackgroundColor
+        signUpButton.setTitleColor(viewModel.buttonTitleColor, for: .normal)
+        signUpButton.isEnabled = viewModel.formIsValid
+    }
+
 }
