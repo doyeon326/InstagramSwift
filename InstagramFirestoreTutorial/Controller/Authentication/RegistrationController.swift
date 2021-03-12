@@ -16,6 +16,7 @@ class RegistrationController: UIViewController {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo"), for: .normal)
         button.tintColor = .white
+        button.addTarget(self, action: #selector (handleProfilePhotoSelect), for: .touchUpInside)
         return button
     }()
     
@@ -59,7 +60,6 @@ class RegistrationController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    
     @objc func textDidChange(sender: UITextField) {
         if sender == emailTextField {
             viewModel.email = sender.text
@@ -71,6 +71,13 @@ class RegistrationController: UIViewController {
             viewModel.username = userNameTextField.text
         }
         updateForm()
+    }
+    
+    @objc func handleProfilePhotoSelect() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
     }
     
     // MARK: - Helpers
@@ -103,7 +110,7 @@ class RegistrationController: UIViewController {
     }
 }
 
-//MARK: - FormViewModel
+// MARK: - FormViewModel
 
 extension RegistrationController: FormViewModel {
     func updateForm() {
@@ -112,4 +119,18 @@ extension RegistrationController: FormViewModel {
         signUpButton.isEnabled = viewModel.formIsValid
     }
 
+}
+
+// MARK: - UIImagePickerControllerDelegate
+extension RegistrationController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let selectedImage = info[.editedImage] as? UIImage else { return }
+        plushPhotoButton.layer.cornerRadius = plushPhotoButton.frame.width / 2
+        plushPhotoButton.layer.masksToBounds = true
+        plushPhotoButton.layer.borderColor = UIColor.white.cgColor
+        plushPhotoButton.layer.borderWidth = 2
+        plushPhotoButton.setImage(selectedImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        self.dismiss(animated: true, completion: nil)
+    }
 }
