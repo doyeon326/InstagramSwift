@@ -142,7 +142,6 @@ xcuserdata
 
 
 
-
 ## Gcc Patch
 /*.gcno
 
@@ -152,5 +151,11 @@ xcuserdata
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+
+
+### Firestore ###
+GoogleService-Info.plist
+
+
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,cocoapods,swiftpackagemanager,objective-c,xcode
