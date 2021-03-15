@@ -12,6 +12,8 @@ class RegistrationController: UIViewController {
     // MARK: - Properties
     
     private var viewModel = RegistrationViewModel()
+    private var profileImage: UIImage?
+    
     private let plushPhotoButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo"), for: .normal)
@@ -37,6 +39,9 @@ class RegistrationController: UIViewController {
  
     private let signUpButton: UIButton = {
         let button = CustomButton(placeholder: "Sign Up")
+        button.addTarget(self, action: #selector (handleSignUp), for: .touchUpInside)
+        button.isEnabled = false
+        button.backgroundColor = #colorLiteral(red: 0.5568627715, green: 0.3529411852, blue: 0.9686274529, alpha: 1).withAlphaComponent(0.5)
         return button
     }()
     
@@ -55,6 +60,16 @@ class RegistrationController: UIViewController {
         configureNotificationObservers()
     }
     // MARK: - Actions
+    @objc func handleSignUp(){
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullname = fullnameTextField.text else { return }
+        guard let username = userNameTextField.text else { return }
+        guard let profileImage = self.profileImage else { return }
+        
+        let credential = AuthCredentials(email: email, password: password, fullname: fullname, username: username, profileImag: profileImage)
+        AuthService.registerUser(withCredentials: credential)
+    }
     
     @objc func handleShowLogin() {
         navigationController?.popViewController(animated: true)
@@ -125,6 +140,8 @@ extension RegistrationController: FormViewModel {
 extension RegistrationController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let selectedImage = info[.editedImage] as? UIImage else { return }
+        profileImage = selectedImage
+        
         plushPhotoButton.layer.cornerRadius = plushPhotoButton.frame.width / 2
         plushPhotoButton.layer.masksToBounds = true
         plushPhotoButton.layer.borderColor = UIColor.white.cgColor
