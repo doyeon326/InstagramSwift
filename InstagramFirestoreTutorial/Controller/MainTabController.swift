@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class MainTabController: UITabBarController {
     
@@ -14,7 +15,29 @@ class MainTabController: UITabBarController {
         //once the view loaded, 
         super.viewDidLoad()
         configureViewControllers()
+        checkIfUserIsLogggedIn()
+        //logout()
         
+    }
+    
+    // MARK: - API
+    func checkIfUserIsLogggedIn() {
+        if Auth.auth().currentUser == nil { //Background thread
+            DispatchQueue.main.async { // that's why using it in main thread
+                let controller = LoginController()
+                let nav = UINavigationController(rootViewController: controller)
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func logout() {
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print("DEBUG: Failed to sign up")
+        }
     }
     
     // MARK: - Helpers
