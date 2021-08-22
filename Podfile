@@ -6,6 +6,7 @@ target 'InstagramFirestoreTutorial' do
   use_frameworks!
 
   # Pods for InstagramFirestoreTutorial
+
  	pod 'Firebase/Core'
 	pod 'Firebase/Database'
 	pod 'Firebase/Firestore'
@@ -16,4 +17,14 @@ target 'InstagramFirestoreTutorial' do
 	pod 'SDWebImage','~>4.4.2'
 	pod 'JGProgressHUD','~>2.0.3'
 	pod 'YPImagePicker'
+
+  target 'InstagramFirestoreTutorialTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'InstagramFirestoreTutorialUITests' do
+    # Pods for testing
+  end
+
 end
